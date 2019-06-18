@@ -12,7 +12,7 @@ namespace structures {
 class Trie {
 	public:
 	void insert(string key) {
-        root = root->insert(root, key, 0);
+        root->insert(root, key, 0);
         //cout << "executando insert() com key = " << key << "\n";
     }
     private:
@@ -32,7 +32,6 @@ class Trie {
 
             for (int i = 0; i < sons.size(); ++i) {
               if (sons[i]->letter == key[d]) {
-                d++;
                 node = sons[i];
                 hasChild = true;
                 break;
@@ -46,9 +45,8 @@ class Trie {
 
             bool last = key.size() == d + 1;
             if (!last) {
-              node->insert(node, key, d);
+              node->insert(node, key, d + 1);
             }
-
         }
     };
     Node* root;        
