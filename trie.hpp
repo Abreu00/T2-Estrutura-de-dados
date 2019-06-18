@@ -40,7 +40,7 @@ class Trie {
             }
 
             if (!hasChild) {
-              Node* node = new Node(key[d - 1]);
+              Node* node = new Node(key[d]);
               sons.push_back(node);
             }
 
@@ -48,6 +48,7 @@ class Trie {
             if (!last) {
               node->insert(node, key, d);
             }
+
         }
     };
     Node* root;        
