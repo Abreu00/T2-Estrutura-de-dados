@@ -3,6 +3,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <vector>
 
 using namespace std;
 
@@ -17,20 +18,36 @@ class Trie {
     private:
     	struct Node {
         char letter;
-        Node* sons[26];
+        vector<Node *> sons;
         std::size_t pos;
         std::size_t length;
-        Node* insert(Node* x, string key, int d) {
-            if (x == NULL) x = new Node;
-            if (d == key.size()) {
-                return x;
+        
+        explicit Node(char letter){
+            this->letter = letter;
+        }
+
+        Node* insert(Node* node, string key, int d) {
+          
+            bool hasChild = false;
+
+            for (int i = 0; i < sons.size(); ++i) {
+              if (sons[i]->letter == key[d]) {
+                d++;
+                node = sons[i];
+                hasChild = true;
+                break;
+              }
             }
-            char c = key[d];
-            int intValueOfChar = (int) c;
-            int index =  intValueOfChar % 97;
-            x->sons[index] = insert(x->sons[index], key, d+1);
-            //cout << "executando insert do node com key = " << key << " d = " << d << "\n";
-            return x;
+
+            if (!hasChild) {
+              Node* node = new Node(key[d - 1]);
+              sons.push_back(node);
+            }
+
+            bool last = key.size() == d + 1;
+            if (!last) {
+              node->insert(node, key, d);
+            }
         }
     };
     Node* root;        
