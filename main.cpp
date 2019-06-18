@@ -2,35 +2,10 @@
 #include <fstream>
 #include <string>
 #include <stdexcept>  // C++ exceptions
+#include "trie.hpp"
 
 using namespace std;
-class Trie {
-	public:
-	void insert(string key) {
-        root = root->insert(root, key, 0);
-        //cout << "executando insert() com key = " << key << "\n";
-    }
-    private:
-    	struct Node {
-        char letter;
-        Node* sons[26];
-        std::size_t pos;
-        std::size_t length;
-        Node* insert(Node* x, string key, int d) {
-            if (x == NULL) x = new Node;
-            if (d == key.size()) {
-                return x;
-            }
-            char c = key[d];
-            int intValueOfChar = (int) c;
-            int index =  intValueOfChar % 97;
-            x->sons[index] = insert(x->sons[index], key, d+1);
-            //cout << "executando insert do node com key = " << key << " d = " << d << "\n";
-            return x;
-        }
-    };
-    Node* root;        
-};
+using namespace structures;
 
 string find_prefix_in_line(string line) {
 	string return_string;
