@@ -29,13 +29,22 @@ int main() {
     cin >> filename;  // entrada
 
     string line;
-    ifstream myfile (filename);
+    ifstream myfile (filename);    
+    int last_line_length = 0;
+    int last_line_pos = -1;
+    int char_pos = 0;
     if (myfile.is_open()) {
         while ( getline (myfile,line) ) {                       
             string prefix_in_line;
             prefix_in_line = find_prefix_in_line(line);
-            //cout << prefix_in_line << "\n"; 
-            myTrie.insert(prefix_in_line);                  
+            //cout << prefix_in_line << "\n";
+            char_pos = last_line_length + last_line_pos + 1;
+            int this_line_length = line.size();                            
+            myTrie.insert(prefix_in_line, this_line_length, char_pos);    
+            //cout << "comprimento da linha = " << this_line_length << "\n"; 
+            //cout << "char pos = " << char_pos << "\n";
+            last_line_length = this_line_length;
+            last_line_pos = char_pos;             
         }       
         myfile.close(); 
     }
@@ -46,8 +55,8 @@ int main() {
         if (word.compare("0") == 0) {
             break;
         }
-        if (myTrie.search(word)) {
-            cout << "is prefix\n";
+        if (myTrie.isPrefix(word)) {
+            myTrie.printResult(word);            
         } else {
             cout << "is not prefix\n";
         }        
