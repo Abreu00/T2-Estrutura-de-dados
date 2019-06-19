@@ -15,6 +15,11 @@ class Trie {
 	Trie() {
     root = new Node('\0');
   }
+
+  ~Trie() {
+    root->destroyRec();
+    delete root;
+  }
   
   void insert(string key) {
     root->insert(root, key, 0);
@@ -31,6 +36,17 @@ class Trie {
     explicit Node(char letter){
       this->letter = letter;
       this->sons = vector<Node*>();
+    }
+
+    Node* destroyRec() {
+      int size = sons.size();
+      if (size == 0) {
+        return this;
+      }
+      for (int i = 0; i < size; ++i) {
+        delete sons[i]->destroyRec();
+      }
+      return this;
     }
 
     Node* insert(Node* node, string key, int d) {
