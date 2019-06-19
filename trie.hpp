@@ -12,7 +12,7 @@ namespace structures {
 
 class Trie {
  public:
-	Trie() {
+    Trie() {
     root = new Node('\0');
   }
 
@@ -25,7 +25,21 @@ class Trie {
     root->insert(root, key, 0);
     //cout << "executando insert() com key = " << key << "\n";
   }
-
+  bool search(string key) {
+        Node* current = root;
+        for (int i = 0 ; i < key.size(); ++i) {            
+            for (int j = 0 ; j < current->sons.size(); j++) {
+                if (current->sons[j]->letter == key[i]) {
+                    current = current->sons[j];                    
+                }
+            }
+        }
+        if(current->length == key.size()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
  private:
   struct Node {
     char letter;
@@ -49,7 +63,7 @@ class Trie {
       return this;
     }
 
-    Node* insert(Node* node, string key, int d) {
+    void insert(Node* node, string key, int d) {
       bool hasChild = false;
       Node* next_node;
       for (int i = 0; i < sons.size(); ++i) {
@@ -62,12 +76,16 @@ class Trie {
 
       if (!hasChild) {
         next_node = new Node(key[d]);
+        //cout << "node com caractere = " << key[d] << " criado\n";        
         sons.push_back(next_node);
       }
 
       bool last = key.size() == d + 1;
       if (!last) {
         next_node->insert(node, key, d + 1);
+      } else {
+        next_node->length = d + 1;
+        //cout << "nodo tem comprimento = " << d << " e seu caractere é igual a: " << key[d] << "\n";
       }
     }
 };
